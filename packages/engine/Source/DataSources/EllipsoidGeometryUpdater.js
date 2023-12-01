@@ -2,8 +2,6 @@ import Cartesian3 from "../Core/Cartesian3.js";
 import Check from "../Core/Check.js";
 import Color from "../Core/Color.js";
 import ColorGeometryInstanceAttribute from "../Core/ColorGeometryInstanceAttribute.js";
-import defaultValue from "../Core/defaultValue.js";
-import defined from "../Core/defined.js";
 import DistanceDisplayCondition from "../Core/DistanceDisplayCondition.js";
 import DistanceDisplayConditionGeometryInstanceAttribute from "../Core/DistanceDisplayConditionGeometryInstanceAttribute.js";
 import EllipsoidGeometry from "../Core/EllipsoidGeometry.js";
@@ -11,9 +9,12 @@ import EllipsoidOutlineGeometry from "../Core/EllipsoidOutlineGeometry.js";
 import GeometryInstance from "../Core/GeometryInstance.js";
 import GeometryOffsetAttribute from "../Core/GeometryOffsetAttribute.js";
 import Iso8601 from "../Core/Iso8601.js";
+import CesiumMath from "../Core/Math.js";
 import Matrix4 from "../Core/Matrix4.js";
 import OffsetGeometryInstanceAttribute from "../Core/OffsetGeometryInstanceAttribute.js";
 import ShowGeometryInstanceAttribute from "../Core/ShowGeometryInstanceAttribute.js";
+import defaultValue from "../Core/defaultValue.js";
+import defined from "../Core/defined.js";
 import HeightReference from "../Scene/HeightReference.js";
 import MaterialAppearance from "../Scene/MaterialAppearance.js";
 import PerInstanceColorAppearance from "../Scene/PerInstanceColorAppearance.js";
@@ -22,9 +23,9 @@ import SceneMode from "../Scene/SceneMode.js";
 import ColorMaterialProperty from "./ColorMaterialProperty.js";
 import DynamicGeometryUpdater from "./DynamicGeometryUpdater.js";
 import GeometryUpdater from "./GeometryUpdater.js";
-import heightReferenceOnEntityPropertyChanged from "./heightReferenceOnEntityPropertyChanged.js";
 import MaterialProperty from "./MaterialProperty.js";
 import Property from "./Property.js";
+import heightReferenceOnEntityPropertyChanged from "./heightReferenceOnEntityPropertyChanged.js";
 
 const defaultMaterial = new ColorMaterialProperty(Color.WHITE);
 const defaultOffset = Cartesian3.ZERO;
@@ -547,7 +548,7 @@ DynamicEllipsoidGeometryUpdater.prototype.update = function (time) {
     options.radii = Cartesian3.clone(in3D ? unitSphere : radii, options.radii);
     if (defined(innerRadii)) {
       if (in3D) {
-        const mag = Cartesian3.magnitude(radii);
+        const mag = Cartesian3.magnitude(radii) * Math.tan(CesiumMath.PI_OVER_SIX);
         options.innerRadii = Cartesian3.fromElements(
           innerRadii.x / mag,
           innerRadii.y / mag,
