@@ -4,6 +4,8 @@ on:
     branches-ignore: 
       - 'cesium.com'
       - production
+  workflow_dispatch:
+   
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
